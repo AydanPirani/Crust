@@ -28,6 +28,19 @@ impl Token {
     }
 }
 
+
+// pub fn expect_token(actual: &Token, expected: Token) -> bool {
+//     let mut equal = true;
+
+//     if std::mem::discriminant(actual) != std::mem::discriminant(&expected) {
+//         equal = true;
+//     }
+
+
+
+//     return equal;
+// }
+
 #[derive(Debug)]
 pub enum Keyword {
     Int,

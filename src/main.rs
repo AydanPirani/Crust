@@ -1,18 +1,13 @@
-mod lexer;
+mod ast;
 mod token;
+
+mod lexer;
+mod parser;
 
 fn main() {
     let filepath = "programs/multi_digit.c";
 
-    let tokens = match lexer::lex_file(filepath) {
-        Ok(tokens) => tokens,
-        Err(err) => {
-            println!("Error: {}", err);
-            return;
-        }
-    };
+    let tokens = lexer::lex_file(filepath).unwrap();
 
-    for token in tokens {
-        println!("{:?}", token);
-    }
+    let ast = parser::parse(&tokens).unwrap();
 }
