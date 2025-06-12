@@ -2,7 +2,7 @@ mod lexer;
 mod token;
 
 fn main() {
-    let filepath = "programs/return_2.c";
+    let filepath = "programs/multi_digit.c";
 
     let tokens = match lexer::lex_file(filepath) {
         Ok(tokens) => tokens,

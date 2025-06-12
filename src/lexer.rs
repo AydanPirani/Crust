@@ -1,4 +1,4 @@
-use crate::token::{self, Keyword, Literal, Token};
+use crate::token::{Keyword, Literal, Token};
 use regex::Regex;
 
 const IDENT_PATTERN: &str = "^[a-zA-Z]+";
@@ -54,22 +54,22 @@ fn tokenize(token_str: &str, tokens: &mut Vec<Token>) -> Result<(), String> {
     }
 
     if token_str.starts_with("int") {
-        let token = Token::Keyword {r#type: Keyword::Int};
+        let token = Token::Keyword {ty: Keyword::Int};
         return step(token, token_str, tokens);
     }
 
     if token_str.starts_with("return") {
-        let token = Token::Keyword {r#type: Keyword::Return};
+        let token = Token::Keyword {ty: Keyword::Return};
         return step(token, token_str, tokens);
     }
 
     if let Some(prefix) = split_token(token_str, INT_PATTERN) {
-        let token = Token::Literal {r#type: Literal::Int, value: prefix.to_string() };
+        let token = Token::Literal {ty: Literal::Int, val: prefix.to_string() };
         return step(token, token_str, tokens);
     }
 
     if let Some(prefix) = split_token(token_str, IDENT_PATTERN) {
-        let token = Token::Identifier {name: prefix.to_string()};
+        let token = Token::Identifier {val: prefix.to_string()};
         return step(token, token_str, tokens);
     }
 
