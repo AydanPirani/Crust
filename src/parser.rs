@@ -24,12 +24,12 @@ pub fn parse(tokens: &Vec<Token>) -> Result<Program, String> {
 }
 
 fn parse_program(tokens: &Vec<Token>, offset: usize) -> Result<Program, String> {
-let function = parse_function(tokens, offset)?;
+    let (_, function) = parse_function(tokens, offset)?;
     Ok(Program::FunctionCall { function: function })
 
 }
 
-fn parse_function(tokens: &Vec<Token>, mut offset: usize) -> Result<Function, String> {
+fn parse_function(tokens: &Vec<Token>, mut offset: usize) -> Result<(usize, Function), String> {
     let token =  tokens.get(offset).unwrap();    
     
     expect_token!(token, Token::Keyword { ty: Keyword::Int } => ());
@@ -49,30 +49,36 @@ fn parse_function(tokens: &Vec<Token>, mut offset: usize) -> Result<Function, St
     expect_token!(tokens.get(offset).unwrap(), Token::OpenBrace => ());
     offset += 1;
 
-    let body = parse_statement(tokens, offset)?;
+    let (mut offset, body) = parse_statement(tokens, offset)?;
 
     expect_token!(tokens.get(offset).unwrap(), Token::CloseBrace => ());
+    offset += 1;
 
-    Ok(Function::Define { name: name, body: body })
+    Ok((offset, Function::Define { name: name, body: body }))
     
 }
 
 
-fn parse_statement(tokens: &Vec<Token>, mut offset: usize) -> Result<Statement, String> {
+fn parse_statement(tokens: &Vec<Token>, mut offset: usize) -> Result<(usize, Statement), String> {
     let token =  tokens.get(offset).unwrap();
     expect_token!(token, Token::Keyword { ty: Keyword::Return } => ());
     offset += 1;
 
-    let expression = parse_expression(tokens, offset)?;
-    Ok(Statement::Expression { expression: expression })
+    let (mut offset, expression) = parse_expression(tokens, offset)?;
+
+    expect_token!(tokens.get(offset).unwrap(), Token::Semicolon => ());
+    offset += 1;
+
+    Ok((offset, Statement::Expression { expression: expression }))
 }
 
 
-fn parse_expression(tokens: &Vec<Token>, offset: usize) -> Result<Expression, String> {
+fn parse_expression(tokens: &Vec<Token>, mut offset: usize) -> Result<(usize, Expression), String> {
     let token =  tokens.get(offset).unwrap();
     let val = expect_token!(token, Token::Literal { ty: Literal::Int, val } => val.clone());
+    offset += 1;
 
     let int = val.parse::<i32>().unwrap();
 
-    Ok(Expression::Int { int })
+    Ok((offset, Expression::Int { int }))
 }
