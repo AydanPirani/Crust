@@ -69,7 +69,7 @@ fn parse_statement(tokens: &Vec<Token>, mut offset: usize) -> Result<(usize, Sta
     expect_token!(tokens.get(offset).unwrap(), Token::Semicolon => ());
     offset += 1;
 
-    Ok((offset, Statement::Expression { expression: expression }))
+    Ok((offset, Statement::Return { expression: expression }))
 }
 
 

@@ -12,7 +12,7 @@ pub enum Function {
 
 #[derive(Debug)]
 pub enum Statement {
-    Expression {expression: Expression},
+    Return {expression: Expression},
 }
 
 #[derive(Debug)]
@@ -31,7 +31,7 @@ impl Display for Expression {
 impl Display for Statement {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Statement::Expression { expression } =>
+            Statement::Return { expression } =>
                 write!(f, "Expression({})", expression),
         }
     }
